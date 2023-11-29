@@ -12,6 +12,7 @@ struct GamePlanner {
     var countries = ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
     var score = 0
     var correctAnswer = 0
+    var numberOfQuestions = 0
     
     mutating func askQuestion(_ button1: UIButton, _ button2: UIButton, _ button3: UIButton, action: UIAlertAction! = nil) {
         countries.shuffle()

@@ -25,17 +25,31 @@ class ViewController: UIViewController {
         button3.layer.borderColor = UIColor.lightGray.cgColor
         
         gamePlanner.askQuestion(button1, button2, button3)
-        title = gamePlanner.countries[gamePlanner.correctAnswer]
+        title = gamePlanner.countries[gamePlanner.correctAnswer].uppercased()
     }
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
+        gamePlanner.numberOfQuestions += 1
         
         if sender.tag == gamePlanner.correctAnswer {
             title = "Correct"
             gamePlanner.score += 1
         } else {
-            title = "Wrong"
-            gamePlanner.score -= 1
+            title = "Wrong! That’s the flag of \(gamePlanner.countries[sender.tag].uppercased())"
+        }
+        
+        if gamePlanner.numberOfQuestions == 5 {
+            let ac = UIAlertController(title: "Final Score", message: "\(gamePlanner.score)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Play Again", style: .cancel, handler: { [weak self] action in
+                guard let self = self else {
+                    return
+                }
+                self.gamePlanner.score = 0
+                self.gamePlanner.numberOfQuestions = 0
+                self.gamePlanner.askQuestion(self.button1, self.button2, self.button3, action: action)
+                self.title = self.gamePlanner.countries[self.gamePlanner.correctAnswer].uppercased()
+            }))
+            present(ac, animated: true)
         }
         
         let ac = UIAlertController(title: title, message: "Your score is \(gamePlanner.score).", preferredStyle: .alert)
@@ -44,7 +58,7 @@ class ViewController: UIViewController {
                 return
             }
             self.gamePlanner.askQuestion(self.button1, self.button2, self.button3, action: action)
-            self.title = self.gamePlanner.countries[self.gamePlanner.correctAnswer]
+            self.title = self.gamePlanner.countries[self.gamePlanner.correctAnswer].uppercased()
         }))
         present(ac,animated: true)
     }
